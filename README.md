@@ -72,7 +72,7 @@ Built using Terraform on Amazon Web Services:
 
 ## 🖼️ Architecture Diagram
 
-![Architecture](docs/architecture.png)
+https://github.com/hamoud31/gitops-devsecops-jenkins/blob/main/docs/images/architecture.png
 
 ---
 
@@ -200,7 +200,7 @@ Kubernetes autoscaling and rolling updates
 ## 🖼️ Demo & Proof (Screenshots)
 
 ### 🔹 CI Pipeline – Jenkins
-![Jenkins Pipeline](docs/images/jenkins-pipeline.png)
+https://github.com/hamoud31/gitops-devsecops-jenkins/blob/main/docs/images/jenkins-pipeline.png
 
 ---
 
@@ -209,18 +209,34 @@ Kubernetes autoscaling and rolling updates
 
 ---
 
-### 🔹 Security Scan – Trivy
-![Trivy Scan](docs/images/trivy-scan.png)
+### 🔹 Nexus – Repository
 
+https://github.com/hamoud31/gitops-devsecops-jenkins/blob/main/docs/images/Nexus-repository.png
 ---
 
 ### 🔹 GitOps Deployment – ArgoCD
-![ArgoCD](docs/images/argocd-sync.png)
+https://github.com/hamoud31/gitops-devsecops-jenkins/blob/main/docs/images/argocd-sync.png
 
 ---
 
 ### 🔹 Monitoring – Grafana
-![Grafana Dashboard](docs/images/grafana-dashboard.png)
+https://github.com/hamoud31/gitops-devsecops-jenkins/blob/main/docs/images/grafana-dashboard.png
+### 🔹 Monitoring – Prometheus
+https://github.com/hamoud31/gitops-devsecops-jenkins/blob/main/docs/images/Prometheus-dashboard.png
+---
+
+### 🔹 “Access Application via Browser
+https://github.com/hamoud31/gitops-devsecops-jenkins/blob/main/docs/images/app.png
+
+---
+
+### 🔹Infrastructure Used in This Project
+https://github.com/hamoud31/gitops-devsecops-jenkins/blob/main/docs/images/Infra-project.png
+
+---
+
+### 🔹EKS infra provision
+https://github.com/hamoud31/gitops-devsecops-jenkins/blob/main/docs/images/eks-infra.png
 
 ---
 
