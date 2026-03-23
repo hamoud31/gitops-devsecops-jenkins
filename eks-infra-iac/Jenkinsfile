@@ -1,0 +1,119 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'TF_WORKSPACE', defaultValue: 'dev', description: 'Terraform workspace to use')
+        booleanParam(name: 'DESTROY_INFRA', defaultValue: false, description: 'Destroy infrastructure instead of applying')
+    }
+
+    environment {
+        AWS_REGION = "eu-west-3"
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    credentialsId: 'github_creds',
+                    url: 'https://github.com/hamoud31/gitops-devsecops-jenkins.git'
+            }
+        }
+
+        stage('Terraform Init') {
+            steps {
+                dir('eks-infra-iac/terraform') {
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: 'aws_creds'
+                    ]]) {
+                        sh """
+                            terraform --version
+                            terraform init -input=false
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Terraform Workspace') {
+            steps {
+                dir('eks-infra-iac/terraform') {
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: 'aws_creds'
+                    ]]) {
+                        sh """
+                            unset TF_WORKSPACE
+                            terraform workspace select ${TF_WORKSPACE} \
+                            || terraform workspace new ${TF_WORKSPACE}
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Terraform Validate') {
+            steps {
+                dir('eks-infra-iac/terraform') {
+                    sh "terraform validate"
+                }
+            }
+        }
+
+        stage('Terraform Plan') {
+            when {
+                expression { return params.DESTROY_INFRA == false }
+            }
+            steps {
+                dir('eks-infra-iac/terraform') {
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: 'aws_creds'
+                    ]]) {
+                        sh "terraform plan -input=false -out=tfplan"
+                    }
+                }
+            }
+        }
+
+        stage('Terraform Apply') {
+            when {
+                expression { return params.DESTROY_INFRA == false }
+            }
+            steps {
+                dir('eks-infra-iac/terraform') {
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: 'aws_creds'
+                    ]]) {
+                        sh "terraform apply -input=false -auto-approve tfplan"
+                    }
+                }
+            }
+        }
+
+        stage('Terraform Destroy') {
+            when {
+                expression { return params.DESTROY_INFRA == true }
+            }
+            steps {
+                dir('eks-infra-iac/terraform') {
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: 'aws_creds'
+                    ]]) {
+                        sh "terraform destroy -auto-approve"
+                    }
+                }
+            }
+        }
+
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'eks-infra-iac/terraform/tfplan', allowEmptyArchive: true
+        }
+    }
+}

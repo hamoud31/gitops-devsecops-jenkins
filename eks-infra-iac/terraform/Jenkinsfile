@@ -1,0 +1,83 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_REGION = "eu-west-1"
+        TF_WORKSPACE = "dev"
+        AWS_CREDS = credentials('aws-creds-id')
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Terraform Init') {
+            steps {
+                dir('terraform') {
+                    sh """
+                        terraform --version
+                        terraform init -input=false
+                    """
+                }
+            }
+        }
+
+        stage('Terraform Workspace') {
+            steps {
+                dir('terraform') {
+                    sh """
+                        terraform workspace select ${TF_WORKSPACE} \
+                        || terraform workspace new ${TF_WORKSPACE}
+                    """
+                }
+            }
+        }
+
+        stage('Terraform Validate') {
+            steps {
+                dir('terraform') {
+                    sh "terraform validate"
+                }
+            }
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                dir('terraform') {
+                    withEnv([
+                        "AWS_ACCESS_KEY_ID=${AWS_CREDS_USR}",
+                        "AWS_SECRET_ACCESS_KEY=${AWS_CREDS_PSW}",
+                        "AWS_DEFAULT_REGION=${AWS_REGION}"
+                    ]) {
+                        sh "terraform plan -input=false -out=tfplan"
+                    }
+                }
+            }
+        }
+
+        stage('Terraform Apply') {
+            when { branch 'main' }
+            steps {
+                dir('terraform') {
+                    withEnv([
+                        "AWS_ACCESS_KEY_ID=${AWS_CREDS_USR}",
+                        "AWS_SECRET_ACCESS_KEY=${AWS_CREDS_PSW}",
+                        "AWS_DEFAULT_REGION=${AWS_REGION}"
+                    ]) {
+                        sh "terraform apply -input=false -auto-approve tfplan"
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'terraform/tfplan', allowEmptyArchive: true
+        }
+    }
+}
