@@ -222,8 +222,12 @@ https://github.com/hamoud31/gitops-devsecops-jenkins/blob/main/docs/images/argoc
 
 ### 🔹 Monitoring – Grafana
 https://github.com/hamoud31/gitops-devsecops-jenkins/blob/main/docs/images/grafana-dashboard.png
+
+---
+
 ### 🔹 Monitoring – Prometheus
 https://github.com/hamoud31/gitops-devsecops-jenkins/blob/main/docs/images/Prometheus-dashboard.png
+
 ---
 
 ### 🔹 “Access Application via Browser
