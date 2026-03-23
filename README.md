@@ -73,6 +73,7 @@ Built using Terraform on Amazon Web Services:
 ## 🖼️ Architecture Diagram
 
 https://github.com/hamoud31/gitops-devsecops-jenkins/blob/main/docs/images/architecture.png
+![Architecture](docs/images/architecture.png)
 
 ---
 
@@ -205,7 +206,7 @@ https://github.com/hamoud31/gitops-devsecops-jenkins/blob/main/docs/images/jenki
 ---
 
 ### 🔹 Code Quality – SonarQube
-![SonarQube](docs/images/sonarqube-dashboard.png)
+https://github.com/hamoud31/gitops-devsecops-jenkins/blob/main/docs/images/sonarqube-dashboard.png
 
 ---
 
