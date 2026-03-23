@@ -73,6 +73,7 @@ Built using Terraform on Amazon Web Services:
 ## 🖼️ Architecture Diagram
 
 https://github.com/hamoud31/gitops-devsecops-jenkins/blob/main/docs/images/architecture.png
+
 ![Architecture](docs/images/architecture.png)
 
 ---
@@ -212,7 +213,9 @@ https://github.com/hamoud31/gitops-devsecops-jenkins/blob/main/docs/images/sonar
 
 ### 🔹 Nexus – Repository
 
+---
 https://github.com/hamoud31/gitops-devsecops-jenkins/blob/main/docs/images/Nexus-repository.png
+
 ---
 
 ### 🔹 GitOps Deployment – ArgoCD
